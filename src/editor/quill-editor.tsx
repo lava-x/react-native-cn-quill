@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { WebView, WebViewProps } from 'react-native-webview';
+import { WebViewProps } from 'react-native-webview';
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import MathJax from 'react-native-mathjax';
 import { createHtml } from '../utils/editor-utils';
 import type {
   CustomFont,
@@ -47,7 +48,7 @@ export default class QuillEditor extends React.Component<
   EditorProps,
   EditorState
 > {
-  private _webview: React.RefObject<WebView>;
+  private _webview: React.RefObject<MathJax>;
   private _handlers: Array<{
     event: EditorEventType;
     handler: EditorEventHandler;
@@ -286,7 +287,34 @@ export default class QuillEditor extends React.Component<
     style: StyleProp<ViewStyle>,
     props: WebViewProps = {}
   ) => (
-    <WebView
+    <MathJax
+      // HTML content with MathJax support
+      html={content}
+      // MathJax config option
+      mathJaxOptions={{
+        messageStyle: 'none',
+        extensions: ['tex2jax.js'],
+        jax: ['input/TeX', 'output/HTML-CSS'],
+        tex2jax: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)'],
+          ],
+          displayMath: [
+            ['$$', '$$'],
+            ['\\[', '\\]'],
+          ],
+          processEscapes: true,
+        },
+        TeX: {
+          extensions: [
+            'AMSmath.js',
+            'AMSsymbols.js',
+            'noErrors.js',
+            'noUndefined.js',
+          ],
+        },
+      }}
       scrollEnabled={false}
       hideKeyboardAccessoryView={true}
       keyboardDisplayRequiresUserAction={false}
@@ -303,7 +331,6 @@ export default class QuillEditor extends React.Component<
       dataDetectorTypes="none"
       {...props}
       javaScriptEnabled={true}
-      source={{ html: content }}
       ref={this._webview}
       onMessage={this.onMessage}
     />
