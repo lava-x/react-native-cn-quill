@@ -44,7 +44,7 @@ export const ListButton: React.FC<Props> = ({ name, items }) => {
     <TouchableOpacity onPress={showMenu}>
       <View style={toolStyle}>
         {selectedItem?.source ? (
-          <Image source={selectedItem.source} style={imageStyle} />
+          <Image source={selectedItem.source} style={imageStyle} resizeMode={'contain'} />
         ) : (
           <Text style={textStyle}>
             {selectedItem ? selectedItem.name : name}
