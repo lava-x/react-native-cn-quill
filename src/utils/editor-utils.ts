@@ -81,7 +81,8 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
       })
       .join('\n')
   }
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">
   </head>
   <body>
   <div id="${args.containerId}">
