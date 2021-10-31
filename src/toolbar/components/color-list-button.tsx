@@ -60,6 +60,7 @@ export const ColorListButton: React.FC<Props> = ({ name, items, source }) => {
                   : theme.color,
             },
           ]}
+          resizeMode={'contain'}
         />
         {isOpen && <View style={overlayStyle} />}
       </View>
