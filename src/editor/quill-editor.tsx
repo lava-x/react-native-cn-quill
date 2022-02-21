@@ -370,7 +370,9 @@ export default class QuillEditor extends React.Component<
         ref={this._webview}
         onMessage={this.onMessage}
       />
-      {Platform.OS === 'android' && <TextInput ref={this._textInput} style={styles.textInput} />}
+      {Platform.OS === 'android' && (
+        <TextInput ref={this._textInput} style={styles.textInput} />
+      )}
     </>
   );
 
@@ -416,5 +418,5 @@ let styles = StyleSheet.create({
     width: 0,
     height: 0,
     bottom: 0,
-  }
+  },
 });

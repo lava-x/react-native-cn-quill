@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ImageSourcePropType,
+} from 'react-native';
 import type { ToggleData, ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
 
@@ -44,7 +51,15 @@ export const ListButton: React.FC<Props> = ({ name, items }) => {
     <TouchableOpacity onPress={showMenu}>
       <View style={toolStyle}>
         {selectedItem?.source ? (
-          <Image source={selectedItem.source} style={imageStyle} resizeMode={'contain'} />
+          React.isValidElement(selectedItem.source) ? (
+            selectedItem.source
+          ) : (
+            <Image
+              source={selectedItem.source as ImageSourcePropType}
+              style={imageStyle}
+              resizeMode={'contain'}
+            />
+          )
         ) : (
           <Text style={textStyle}>
             {selectedItem ? selectedItem.name : name}

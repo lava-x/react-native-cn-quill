@@ -13,7 +13,7 @@ interface Props {
   name: string;
   valueOn: string | number | boolean;
   valueOff: string | number | boolean;
-  source: ImageSourcePropType;
+  source: ImageSourcePropType | JSX.Element;
 }
 
 export const ToggleIconButton: React.FC<Props> = (props) => {
@@ -34,7 +34,15 @@ export const ToggleIconButton: React.FC<Props> = (props) => {
   return (
     <TouchableWithoutFeedback onPress={handlePresss}>
       <View style={toolStyle}>
-        <Image source={source} style={imageStyle} resizeMode={'contain'} />
+        {React.isValidElement(source) ? (
+          source
+        ) : (
+          <Image
+            source={source as ImageSourcePropType}
+            style={imageStyle}
+            resizeMode={'contain'}
+          />
+        )}
         {selected && <View style={overlayStyle} />}
       </View>
     </TouchableWithoutFeedback>
