@@ -11,6 +11,7 @@ import {
   StyleProp,
   ViewStyle,
   Platform,
+  TextInput,
 } from 'react-native';
 import { createHtml } from '../utils/editor-utils';
 import type {
@@ -64,6 +65,7 @@ export default class QuillEditor extends React.Component<
   EditorState
 > {
   private _webview: React.RefObject<WebView>;
+  private _textInput: React.RefObject<TextInput>;
   private _handlers: Array<{
     event: EditorEventType;
     handler: EditorEventHandler;
@@ -73,6 +75,7 @@ export default class QuillEditor extends React.Component<
   constructor(props: EditorProps) {
     super(props);
     this._webview = React.createRef();
+    this._textInput = React.createRef();
     this.state = {
       webviewContent: this.getInitalHtml(),
     };
@@ -242,6 +245,7 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'focus' });
 
     if (Platform.OS === 'android') {
+      this._textInput.current?.focus();
       this._webview.current?.requestFocus();
     }
   };
@@ -344,27 +348,30 @@ export default class QuillEditor extends React.Component<
     style: StyleProp<ViewStyle>,
     props: WebViewProps = {}
   ) => (
-    <WebView
-      scrollEnabled={false}
-      hideKeyboardAccessoryView={true}
-      keyboardDisplayRequiresUserAction={false}
-      originWhitelist={['*']}
-      style={style}
-      onError={(syntheticEvent) => {
-        const { nativeEvent } = syntheticEvent;
-        console.warn('WebView error: ', nativeEvent);
-      }}
-      allowFileAccess={true}
-      domStorageEnabled={false}
-      automaticallyAdjustContentInsets={true}
-      bounces={false}
-      dataDetectorTypes="none"
-      {...props}
-      javaScriptEnabled={true}
-      source={{ html: content }}
-      ref={this._webview}
-      onMessage={this.onMessage}
-    />
+    <>
+      <WebView
+        scrollEnabled={false}
+        hideKeyboardAccessoryView={true}
+        keyboardDisplayRequiresUserAction={false}
+        originWhitelist={['*']}
+        style={style}
+        onError={(syntheticEvent) => {
+          const { nativeEvent } = syntheticEvent;
+          console.warn('WebView error: ', nativeEvent);
+        }}
+        allowFileAccess={true}
+        domStorageEnabled={false}
+        automaticallyAdjustContentInsets={true}
+        bounces={false}
+        dataDetectorTypes="none"
+        {...props}
+        javaScriptEnabled={true}
+        source={{ html: content }}
+        ref={this._webview}
+        onMessage={this.onMessage}
+      />
+      {Platform.OS === 'android' && <TextInput ref={this._textInput} style={styles.textInput} />}
+    </>
   );
 
   render() {
@@ -403,4 +410,11 @@ let styles = StyleSheet.create({
     flexGrow: 1,
     borderWidth: 0,
   },
+  textInput: {
+    position: 'absolute',
+    zIndex: -10,
+    width: 0,
+    height: 0,
+    bottom: 0,
+  }
 });
