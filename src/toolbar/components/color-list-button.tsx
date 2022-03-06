@@ -11,7 +11,7 @@ import { useToolbar } from './toolbar-context';
 
 interface Props {
   name: string;
-  source: ImageSourcePropType;
+  source: ImageSourcePropType | JSX.Element;
   items: Array<ToggleData>;
 }
 
@@ -47,21 +47,25 @@ export const ColorListButton: React.FC<Props> = ({ name, items, source }) => {
   return (
     <TouchableOpacity onPress={showMenu}>
       <View style={toolStyle}>
-        <Image
-          source={source}
-          style={[
-            imageStyle,
-            {
-              tintColor:
-                selectedItem &&
-                selectedItem.valueOn !== false &&
-                typeof selectedItem.valueOn === 'string'
-                  ? selectedItem.valueOn
-                  : theme.color,
-            },
-          ]}
-          resizeMode={'contain'}
-        />
+        {React.isValidElement(source) ? (
+          source
+        ) : (
+          <Image
+            source={source as ImageSourcePropType}
+            style={[
+              imageStyle,
+              {
+                tintColor:
+                  selectedItem &&
+                  selectedItem.valueOn !== false &&
+                  typeof selectedItem.valueOn === 'string'
+                    ? selectedItem.valueOn
+                    : theme.color,
+              },
+            ]}
+            resizeMode={'contain'}
+          />
+        )}
         {isOpen && <View style={overlayStyle} />}
       </View>
     </TouchableOpacity>
