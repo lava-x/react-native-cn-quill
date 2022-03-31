@@ -3,7 +3,6 @@ import {
   View,
   KeyboardAvoidingView,
   ScrollView,
-  Dimensions,
   StyleSheet,
   Platform,
 } from 'react-native';
@@ -24,8 +23,6 @@ import { SelectionBar } from './components/selection-bar';
 import { ToolSet } from './components/tool-set';
 import { ToolbarSeperator } from './components/toolbar-separator';
 import type { FormatChangeData } from '../constants/editor-event';
-
-const WIDTH = Dimensions.get('window').width;
 
 interface QuillToolbarProps {
   options: Array<Array<string | object> | string | object> | 'full' | 'basic';
@@ -198,7 +195,6 @@ const makeStyles = (theme: ToolbarTheme) =>
       position: 'absolute',
       bottom: 0,
       left: 0,
-      width: WIDTH,
       padding: 2,
       backgroundColor: theme.background,
       flexDirection: 'row',
