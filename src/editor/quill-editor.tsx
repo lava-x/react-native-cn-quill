@@ -270,6 +270,10 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'format', name, value });
   };
 
+  removeFormat = () => {
+    this.post({ command: 'removeFormat' });
+  };
+
   deleteText = (index: number, length: number) => {
     this.post({ command: 'deleteText', index, length });
   };

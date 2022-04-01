@@ -36,6 +36,13 @@ export const editor_js = `
     getSelectedFormats();
   }
 
+  var removeFormatSelection = function () {
+    var range = quill.getSelection();
+    if (!range) quill.focus();
+    quill.removeFormat(range.index, range.length)
+    getSelectedFormats();
+  }
+
   var hasFocus = function (key) {
     var hs = quill.hasFocus();
 
@@ -135,6 +142,9 @@ export const editor_js = `
     switch (msg.command) {
       case 'format':
         formatSelection(msg.name, msg.value);
+        break;
+      case 'removeFormat':
+        removeFormatSelection();
         break;
       case 'focus':
         quill.focus();
