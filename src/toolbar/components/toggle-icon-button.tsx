@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  TouchableWithoutFeedback,
   View,
   Image,
   StyleSheet,
   ImageSourcePropType,
+  TouchableOpacity,
 } from 'react-native';
 import type { ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
@@ -32,7 +32,7 @@ export const ToggleIconButton: React.FC<Props> = (props) => {
     ? styles.selection.iconToggle.image(defaultStyles.image)
     : defaultStyles.image;
   return (
-    <TouchableWithoutFeedback onPress={handlePresss}>
+    <TouchableOpacity onPress={handlePresss}>
       <View style={toolStyle}>
         {React.isValidElement(source) ? (
           source
@@ -45,7 +45,7 @@ export const ToggleIconButton: React.FC<Props> = (props) => {
         )}
         {selected && <View style={overlayStyle} />}
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 
