@@ -43,6 +43,7 @@ interface ProviderProps {
   theme: ToolbarTheme;
   custom?: ToolbarCustom;
   styles?: CustomStyles;
+  animatedView?: boolean;
 }
 
 interface ProviderState {
@@ -50,6 +51,7 @@ interface ProviderState {
   isAnimating: boolean;
   options: Array<ToggleData>;
   name: string;
+  toolbarHeight: number;
 }
 
 export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
@@ -61,6 +63,7 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
       isAnimating: false,
       options: [],
       name: '',
+      toolbarHeight: props.theme.size + 10,
     };
     this.animatedValue = new Animated.Value(0);
   }
@@ -68,37 +71,59 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
   show = (name: string, options: Array<ToggleData>) => {
     if (this.state.isAnimating) return;
 
-    const { theme } = this.props;
+    const { theme, animatedView } = this.props;
     if (theme) {
-      this.setState({ options, name, isAnimating: true }, () => {
-        Animated.timing(this.animatedValue, {
-          toValue: 2 * theme.size + 14,
-          duration: 200,
-          easing: Easing.sin,
-          useNativeDriver: false,
-        }).start(() => this.setState({ open: true, isAnimating: false }));
+      if (animatedView) {
+        this.setState({ options, name, isAnimating: true }, () => {
+          Animated.timing(this.animatedValue, {
+            toValue: 2 * theme.size + 14,
+            duration: 200,
+            easing: Easing.sin,
+            useNativeDriver: false,
+          }).start(() => this.setState({ open: true, isAnimating: false }));
+        });
+
+        return;
+      }
+
+      this.setState({
+        options,
+        name,
+        open: true,
+        toolbarHeight: 2 * theme.size + 14,
       });
     }
   };
 
   hide = () => {
     if (this.state.isAnimating) return;
-    const { theme } = this.props;
+    const { theme, animatedView } = this.props;
     if (theme) {
-      this.setState({ isAnimating: true }, () => {
-        Animated.timing(this.animatedValue, {
-          toValue: theme.size + 10,
-          duration: 200,
-          easing: Easing.linear,
-          useNativeDriver: false,
-        }).start(() => {
-          this.setState({
-            name: '',
-            open: false,
-            options: [],
-            isAnimating: false,
+      if (animatedView) {
+        this.setState({ isAnimating: true }, () => {
+          Animated.timing(this.animatedValue, {
+            toValue: theme.size + 10,
+            duration: 200,
+            easing: Easing.linear,
+            useNativeDriver: false,
+          }).start(() => {
+            this.setState({
+              name: '',
+              open: false,
+              options: [],
+              isAnimating: false,
+            });
           });
         });
+
+        return;
+      }
+
+      this.setState({
+        name: '',
+        open: false,
+        options: [],
+        toolbarHeight: theme.size + 10,
       });
     }
   };
@@ -132,7 +157,13 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
   };
 
   render() {
-    const { selectedFormats, children, theme, styles } = this.props;
+    const {
+      selectedFormats,
+      children,
+      theme,
+      styles,
+      animatedView,
+    } = this.props;
     const { open, options, name } = this.state;
     const defaultStyles = makeStyles(theme);
     const rootStyle = styles?.toolbar?.provider
@@ -158,7 +189,9 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
           style={[
             rootStyle,
             {
-              height: this.animatedValue,
+              height: animatedView
+                ? this.animatedValue
+                : this.state.toolbarHeight,
             },
           ]}
         >
