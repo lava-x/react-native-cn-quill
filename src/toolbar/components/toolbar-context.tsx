@@ -63,7 +63,7 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
       isAnimating: false,
       options: [],
       name: '',
-      toolbarHeight: props.theme.size + 10,
+      toolbarHeight: props.theme.size,
     };
     this.animatedValue = new Animated.Value(0);
   }
@@ -123,14 +123,24 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
         name: '',
         open: false,
         options: [],
-        toolbarHeight: theme.size + 10,
+        toolbarHeight: theme.size,
       });
+    }
+  };
+
+  onUpdate = (prevProps: ProviderProps) => {
+    if (prevProps.theme.size !== this.props.theme.size) {
+      this.setState({ toolbarHeight: this.props.theme.size });
     }
   };
 
   componentDidMount() {
     const { theme } = this.props;
     this.animatedValue = new Animated.Value(theme.size + 10);
+  }
+
+  componentDidUpdate(prevProps: ProviderProps) {
+    this.onUpdate(prevProps);
   }
 
   isSelected = (name: string, value: any = true): boolean => {
