@@ -31,6 +31,7 @@ interface QuillToolbarProps {
   theme: ToolbarTheme | 'dark' | 'light';
   custom?: ToolbarCustom;
   container?: false | 'avoiding-view' | React.ComponentType;
+  animatedView?: boolean;
 }
 
 interface ToolbarState {
@@ -43,6 +44,7 @@ interface ToolbarState {
 export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   public static defaultProps = {
     theme: 'dark',
+    animatedView: false,
   };
 
   constructor(props: QuillToolbarProps) {
@@ -130,7 +132,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   };
 
   renderToolbar = () => {
-    const { styles, custom } = this.props;
+    const { styles, custom, animatedView } = this.props;
     const { toolSets, theme, formats } = this.state;
     const defaultStyles = makeStyles(theme);
 
@@ -144,6 +146,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
         selectedFormats={formats}
         custom={custom}
         styles={styles}
+        animatedView={animatedView}
       >
         <SelectionBar />
         <View style={toolbarStyle}>
