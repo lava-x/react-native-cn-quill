@@ -104,6 +104,12 @@ export const editor_js = `
           }
         });
         sendMessage(getDimensionsJson);
+
+        const range = quill.getSelection();
+
+        if (range.index) {
+          quill.setSelection(range.index + 1);
+        }
       }
 
       for (let i = 0; i < elements.length; i++) {
