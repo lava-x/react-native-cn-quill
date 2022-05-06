@@ -92,6 +92,25 @@ export const editor_js = `
 
   var insertEmbed = function (index, type, value) {
     quill.insertEmbed(index, type, value);
+
+    var elements = document.getElementsByTagName('img')
+
+      var onload = function () {
+        const getDimensionsJson = JSON.stringify({
+          type: 'dimensions-change',
+          data: {
+            width: quill.root.scrollWidth,
+            height: quill.root.scrollHeight
+          }
+        });
+        sendMessage(getDimensionsJson);
+      }
+
+      for (let i = 0; i < elements.length; i++) {
+        if (!elements[i].hasAttribute("onload")) {
+          elements[i].onload = onload;
+        }
+      }
   }
 
   var insertText = function (index, text, formats={}) {
